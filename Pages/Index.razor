@@ -1,5 +1,7 @@
-﻿@page "/"
+﻿@*membuka halaman default (index)*@
+@page "/"
 
+@*membuat style*@
 <style>
     .container {
         width: 400px;
@@ -32,6 +34,7 @@
 </div>
 
 @code {
+    // mendeklarasi dan menambahkan data ke dalam List<String>
     List<String> animals = new List<string>()
     {
         "🐭","🐭",
@@ -44,39 +47,63 @@
         "🐸","🐸"
     };
 
+    // mendeklarasikan List<String> untuk List acak
     List<string> shuffledAnimals = new List<string>();
 
+    // memulai permainan
     private void SetUpGame()
     {
+        // fungsi acak (random)
         Random random = new Random();
 
+        // mengambil data dari animals secara acak ke dalam shuffledAnimal
         shuffledAnimals = animals
             .OrderBy(item => random.Next())
             .ToList();
+
+        // reset value count
+        count = 0; 
     }
 
+    // fungsi untuk merender aplikasi
     protected override void OnInitialized()
     {
         SetUpGame();
     }
 
+    // deklarasi
     string clickedAnimal = string.Empty;
     string clickedAnimalDescription = string.Empty;
 
+    int count = 0;
+
+    // fungsi button
     private void ButtonClick(string animal, string animalDescription)
     {
+        // saat value kosong
         if(clickedAnimal == string.Empty)
         {
             clickedAnimal = animal;
             clickedAnimalDescription = animalDescription;
         }
+        // membandingkan 2 buah value
         else if(clickedAnimal == animal && clickedAnimalDescription != animalDescription)
         {
+            // mengubah value menjadi empty
             shuffledAnimals = shuffledAnimals
             .Select(item => item.Replace(animal, string.Empty))
             .ToList();
 
             clickedAnimal = string.Empty;
+
+            // menghitung jumlah benar
+            count++;
+            if(count == 8)
+            {
+                // reset game
+                SetUpGame();
+            }
+
         }
         else
         {
