@@ -16,10 +16,13 @@
 
 <div class="container">
     <div class="row">
-        @foreach (var animal in shuffledAnimals)
+        @for(var animalNumber = 0; animalNumber < shuffledAnimals.Count; animalNumber++)
         {
+            string animal = shuffledAnimals[animalNumber];
+            string animalDescription = $"Animal #{animalNumber}";
+
             <div class="col-3">
-                <button @onclick="(() => ButtonClick(animal))"
+                <button @onclick="(() => ButtonClick(animal, animalDescription))"
                     type="button" class="btn btn-outline-dark">
                     <h1>@animal</h1>
                 </button>
@@ -58,14 +61,16 @@
     }
 
     string clickedAnimal = string.Empty;
+    string clickedAnimalDescription = string.Empty;
 
-    private void ButtonClick(string animal)
+    private void ButtonClick(string animal, string animalDescription)
     {
         if(clickedAnimal == string.Empty)
         {
             clickedAnimal = animal;
+            clickedAnimalDescription = animalDescription;
         }
-        else if(clickedAnimal == animal)
+        else if(clickedAnimal == animal && clickedAnimalDescription != animalDescription)
         {
             shuffledAnimals = shuffledAnimals
             .Select(item => item.Replace(animal, string.Empty))
